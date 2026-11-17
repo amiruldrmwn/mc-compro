@@ -1,0 +1,251 @@
+/*
+ * Public website. Layout uses Tailwind utilities in the Blade views; the look of each template
+ * (fonts, colours, corners, cards, buttons) lives here under .theme-<name>.
+ * --brand and --on-brand come from the site's chosen colour (layout.blade.php).
+ */
+@import 'tailwindcss' source(none);
+
+@source '../views/site';
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body.site {
+        --brand-soft: color-mix(in oklab, var(--brand) 10%, white);
+        --brand-dark: color-mix(in oklab, var(--brand) 70%, black);
+        --ink: #0f172a;
+        --muted: #475569;
+        --line: #e2e8f0;
+        --surface: #ffffff;
+        --surface-alt: #f8fafc;
+        --radius: 0.5rem;
+        --font-body: ui-sans-serif, system-ui, sans-serif;
+        --font-head: var(--font-body);
+
+        margin: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .site h1,
+    .site h2,
+    .site h3 {
+        font-family: var(--font-head);
+        letter-spacing: -0.015em;
+    }
+}
+
+@layer components {
+    .site-container {
+        @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+    }
+
+    .sec {
+        @apply py-16 sm:py-24;
+    }
+
+    .sec-alt {
+        background: var(--surface-alt);
+    }
+
+    .sec-head {
+        @apply mx-auto mb-10 max-w-2xl text-center sm:mb-14;
+    }
+
+    .sec-title {
+        @apply text-3xl font-bold sm:text-4xl;
+    }
+
+    .sec-sub {
+        @apply mt-3 text-lg;
+        color: var(--muted);
+    }
+
+    .eyebrow {
+        @apply mb-3 inline-block text-sm font-semibold tracking-wide uppercase;
+        color: var(--brand);
+    }
+
+    .card {
+        @apply h-full p-6;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold transition;
+        background: var(--brand);
+        color: var(--on-brand);
+        border-radius: var(--radius);
+    }
+
+    .btn:hover {
+        background: var(--brand-dark);
+    }
+
+    .btn-light {
+        background: #fff;
+        color: var(--ink);
+    }
+
+    .btn-light:hover {
+        background: #f1f5f9;
+    }
+
+    .muted {
+        color: var(--muted);
+    }
+
+    .prose-site {
+        @apply text-lg leading-relaxed;
+        color: var(--muted);
+    }
+
+    .prose-site > * + * {
+        @apply mt-4;
+    }
+
+    .prose-site a {
+        color: var(--brand);
+        @apply underline underline-offset-2;
+    }
+
+    .prose-site ul {
+        @apply list-disc pl-6;
+    }
+
+    .prose-site ol {
+        @apply list-decimal pl-6;
+    }
+
+    .prose-site strong {
+        color: var(--ink);
+    }
+
+    .prose-site h2,
+    .prose-site h3 {
+        @apply mt-8 text-2xl font-bold;
+        color: var(--ink);
+    }
+
+    .field {
+        @apply w-full px-4 py-3 text-base outline-none;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+    }
+
+    .field:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 20%, transparent);
+    }
+
+    .nav-link {
+        @apply text-sm font-medium transition;
+        color: var(--muted);
+    }
+
+    .nav-link:hover,
+    .nav-link[aria-current='page'] {
+        color: var(--brand);
+    }
+}
+
+/* ---------- Korporat: solid, structured, trustworthy ---------- */
+.theme-korporat {
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --radius: 0.375rem;
+}
+
+.theme-korporat .sec-title::after {
+    content: '';
+    display: block;
+    width: 3.5rem;
+    height: 3px;
+    margin: 1rem auto 0;
+    background: var(--brand);
+}
+
+.theme-korporat .card {
+    border-top: 3px solid var(--brand);
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.06);
+}
+
+/* ---------- Modern: bold, rounded, gradients ---------- */
+.theme-modern {
+    --font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --radius: 1.25rem;
+    --surface-alt: color-mix(in oklab, var(--brand) 5%, white);
+}
+
+.theme-modern .sec-title {
+    @apply font-extrabold;
+}
+
+.theme-modern .card {
+    border-color: transparent;
+    box-shadow:
+        0 1px 3px rgb(15 23 42 / 0.06),
+        0 12px 32px -12px rgb(15 23 42 / 0.15);
+}
+
+.theme-modern .btn {
+    border-radius: 999px;
+    box-shadow: 0 10px 24px -10px var(--brand);
+}
+
+.theme-modern .eyebrow {
+    @apply rounded-full px-3 py-1 text-xs;
+    background: var(--brand-soft);
+}
+
+.theme-modern .field {
+    border-radius: 0.875rem;
+}
+
+/* ---------- Minimalis: quiet, serif, lots of air ---------- */
+.theme-minimalis {
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-head: 'Fraunces', ui-serif, Georgia, serif;
+    --radius: 0;
+    --surface-alt: #fafaf9;
+    --line: #e7e5e4;
+    --ink: #1c1917;
+    --muted: #57534e;
+}
+
+.theme-minimalis .sec-head {
+    @apply text-left;
+    margin-left: 0;
+}
+
+.theme-minimalis .sec-title {
+    @apply font-semibold;
+}
+
+.theme-minimalis .eyebrow {
+    @apply font-medium tracking-[0.2em];
+    color: var(--muted);
+}
+
+.theme-minimalis .card {
+    @apply px-0;
+    background: transparent;
+    border: 0;
+    border-top: 1px solid var(--ink);
+}
+
+.theme-minimalis .btn {
+    background: var(--ink);
+    color: #fff;
+}
+
+.theme-minimalis .btn:hover {
+    background: var(--brand);
+    color: var(--on-brand);
+}

@@ -18,6 +18,7 @@ php artisan storage:link --force >/dev/null 2>&1 || true
 
 php artisan migrate --force
 php artisan compro:ensure-admin
+php artisan compro:install-content
 php artisan optimize
 
 chown -R www-data:www-data /data /config storage bootstrap/cache

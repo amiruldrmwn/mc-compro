@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { ExternalLink, LayoutGrid, Settings2 } from '@lucide/vue';
+import {
+    ExternalLink,
+    FileText,
+    Inbox,
+    LayoutGrid,
+    Palette,
+    Settings2,
+} from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -15,7 +22,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard, home } from '@/routes';
+import { index as messagesIndex } from '@/routes/messages';
+import { index as pagesIndex } from '@/routes/pages';
 import { edit as editSite } from '@/routes/site';
+import { index as themesIndex } from '@/routes/themes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -23,6 +33,21 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Halaman',
+        href: pagesIndex(),
+        icon: FileText,
+    },
+    {
+        title: 'Template',
+        href: themesIndex(),
+        icon: Palette,
+    },
+    {
+        title: 'Pesan Masuk',
+        href: messagesIndex(),
+        icon: Inbox,
     },
     {
         title: 'Pengaturan Situs',

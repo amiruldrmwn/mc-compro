@@ -17,6 +17,7 @@ class Site
 
     public const DEFAULTS = [
         'site_name' => null,
+        'theme' => 'korporat',
         'tagline' => '',
         'description' => '',
         'primary_color' => '#2563eb',
@@ -84,6 +85,50 @@ class Site
         $path = $this->get($key);
 
         return is_string($path) && $path !== '' ? Storage::disk('public')->url($path) : null;
+    }
+
+    /**
+     * Public address of an uploaded image path (from a section), or null when it is empty.
+     */
+    public function image(?string $path): ?string
+    {
+        return $path ? Storage::disk('public')->url($path) : null;
+    }
+
+    /**
+     * Black or white, whichever reads better on the brand colour.
+     */
+    public function onBrand(): string
+    {
+        $hex = ltrim((string) $this->get('primary_color'), '#');
+
+        if (! preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+            return '#ffffff';
+        }
+
+        [$r, $g, $b] = array_map(fn (string $c) => hexdec($c) / 255, str_split($hex, 2));
+        $lum = fn (float $c) => $c <= 0.03928 ? $c / 12.92 : (($c + 0.055) / 1.055) ** 2.4;
+        $l = 0.2126 * $lum($r) + 0.7152 * $lum($g) + 0.0722 * $lum($b);
+
+        return $l > 0.45 ? '#0f172a' : '#ffffff';
+    }
+
+    /**
+     * wa.me link for the WhatsApp number, or null.
+     */
+    public function whatsappUrl(?string $text = null): ?string
+    {
+        $number = preg_replace('/\D/', '', (string) $this->get('whatsapp'));
+
+        if ($number === '') {
+            return null;
+        }
+
+        if (str_starts_with($number, '0')) {
+            $number = '62'.substr($number, 1);
+        }
+
+        return 'https://wa.me/'.$number.($text ? '?text='.rawurlencode($text) : '');
     }
 
     /**

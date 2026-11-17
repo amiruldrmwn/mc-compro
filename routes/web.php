@@ -1,7 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\SiteSettingsController;
+use App\Http\Controllers\Admin\ThemeController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 // Admin panel (login lives at /admin/login, from Fortify).
@@ -10,9 +15,30 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     Route::get('site', [SiteSettingsController::class, 'edit'])->name('site.edit');
     Route::post('site', [SiteSettingsController::class, 'update'])->name('site.update');
+
+    Route::get('pages', [PageController::class, 'index'])->name('pages.index');
+    Route::post('pages', [PageController::class, 'store'])->name('pages.store');
+    Route::post('pages/reorder', [PageController::class, 'reorder'])->name('pages.reorder');
+    Route::get('pages/{page}', [PageController::class, 'edit'])->name('pages.edit');
+    Route::put('pages/{page}', [PageController::class, 'update'])->name('pages.update');
+    Route::delete('pages/{page}', [PageController::class, 'destroy'])->name('pages.destroy');
+    Route::post('pages/{page}/home', [PageController::class, 'makeHome'])->name('pages.home');
+
+    Route::post('media', [MediaController::class, 'store'])->name('media.store');
+
+    Route::get('themes', [ThemeController::class, 'index'])->name('themes.index');
+    Route::put('themes', [ThemeController::class, 'update'])->name('themes.update');
+
+    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::post('messages/{message}/read', [MessageController::class, 'read'])->name('messages.read');
+    Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 });
 
 require __DIR__.'/settings.php';
 
 // Public website.
-Route::view('/', 'site.home')->name('home');
+Route::get('sitemap.xml', [SiteController::class, 'sitemap'])->name('sitemap');
+Route::get('robots.txt', [SiteController::class, 'robots']);
+Route::post('kirim-pesan', [SiteController::class, 'contact'])->middleware('throttle:5,10')->name('contact.send');
+Route::get('/', [SiteController::class, 'show'])->name('home');
+Route::get('{slug}', [SiteController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('page');
