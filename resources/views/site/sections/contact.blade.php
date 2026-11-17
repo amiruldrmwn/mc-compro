@@ -1,7 +1,7 @@
 <section id="{{ $sectionId }}" class="sec">
     <div class="site-container grid gap-12 lg:grid-cols-5">
         <div class="lg:col-span-2">
-            @if ($d['title'])<h1 class="sec-title">{{ $d['title'] }}</h1>@endif
+            @if ($d['title'])<h2 class="sec-title">{{ $d['title'] }}</h2>@endif
             @if ($d['text'])<p class="sec-sub">{{ $d['text'] }}</p>@endif
             @include('site.partials.contact-list', ['class' => 'muted mt-8 text-lg'])
             @if ($site->get('maps_url'))

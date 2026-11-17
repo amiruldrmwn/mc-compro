@@ -97,6 +97,37 @@
         background: #f1f5f9;
     }
 
+    .btn-outline {
+        background: transparent;
+        color: var(--ink);
+        box-shadow: inset 0 0 0 1.5px var(--line);
+    }
+
+    .btn-outline:hover {
+        background: var(--surface-alt);
+        box-shadow: inset 0 0 0 1.5px var(--brand);
+    }
+
+    .btn-ghost-light {
+        background: rgb(255 255 255 / 0.1);
+        color: #fff;
+        box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.5);
+    }
+
+    .btn-ghost-light:hover {
+        background: rgb(255 255 255 / 0.2);
+    }
+
+    .step-num {
+        background: var(--brand-soft);
+        color: var(--brand);
+        border-radius: var(--radius);
+    }
+
+    .team-photo {
+        border-radius: var(--radius);
+    }
+
     .muted {
         color: var(--muted);
     }
@@ -167,13 +198,37 @@
     display: block;
     width: 3.5rem;
     height: 3px;
-    margin: 1rem auto 0;
+    margin: 1rem 0 0;
     background: var(--brand);
+}
+
+.theme-korporat .sec-head .sec-title::after,
+.theme-korporat .text-center .sec-title::after {
+    margin: 1rem auto 0;
 }
 
 .theme-korporat .card {
     border-top: 3px solid var(--brand);
     box-shadow: 0 1px 2px rgb(15 23 42 / 0.06);
+}
+
+.theme-korporat .card-media {
+    border-top: 0;
+    border-bottom: 3px solid var(--brand);
+}
+
+.theme-korporat .step-num {
+    background: var(--brand);
+    color: var(--on-brand);
+}
+
+.theme-korporat .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 1.75rem;
+    left: 4.5rem;
+    right: 0.5rem;
+    border-top: 2px dashed var(--line);
 }
 
 /* ---------- Modern: bold, rounded, gradients ---------- */
@@ -206,6 +261,22 @@
 
 .theme-modern .field {
     border-radius: 0.875rem;
+}
+
+.theme-modern .step-num {
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    color: var(--on-brand);
+    box-shadow: 0 10px 24px -10px var(--brand);
+}
+
+.theme-modern .team-photo {
+    border-radius: 1.5rem;
+}
+
+.theme-modern .btn-outline {
+    box-shadow: inset 0 0 0 1.5px
+        color-mix(in oklab, var(--brand) 35%, transparent);
 }
 
 /* ---------- Minimalis: quiet, serif, lots of air ---------- */
@@ -248,4 +319,40 @@
 .theme-minimalis .btn:hover {
     background: var(--brand);
     color: var(--on-brand);
+}
+
+.theme-minimalis .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.theme-minimalis .card-media {
+    border-top: 0;
+}
+
+.theme-minimalis .card-media > div {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.theme-minimalis .step-num {
+    width: auto;
+    height: auto;
+    justify-content: flex-start;
+    background: none;
+    color: var(--muted);
+    font-size: 3rem;
+    font-weight: 400;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 0.5rem;
+}
+
+.theme-minimalis .team-photo {
+    filter: grayscale(1);
+    transition: filter 0.4s;
+}
+
+.theme-minimalis .team-card:hover .team-photo {
+    filter: none;
 }

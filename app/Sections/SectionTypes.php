@@ -28,7 +28,18 @@ class SectionTypes
                     'subtitle' => ['type' => 'textarea', 'label' => 'Subjudul', 'max' => 400],
                     'button_label' => ['type' => 'text', 'label' => 'Teks tombol', 'max' => 40],
                     'button_url' => ['type' => 'url', 'label' => 'Link tombol', 'max' => 255],
+                    'button2_label' => ['type' => 'text', 'label' => 'Teks tombol kedua', 'max' => 40],
+                    'button2_url' => ['type' => 'url', 'label' => 'Link tombol kedua', 'max' => 255],
                     'image' => ['type' => 'image', 'label' => 'Gambar'],
+                ],
+            ],
+            'page_header' => [
+                'label' => 'Header Halaman',
+                'description' => 'Banner judul di atas halaman dalam, dengan foto latar.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Judul', 'max' => 150, 'required' => true],
+                    'subtitle' => ['type' => 'textarea', 'label' => 'Subjudul', 'max' => 300],
+                    'image' => ['type' => 'image', 'label' => 'Foto latar'],
                 ],
             ],
             'text' => [
@@ -47,6 +58,8 @@ class SectionTypes
                     'body' => ['type' => 'markdown', 'label' => 'Isi', 'max' => 5000],
                     'image' => ['type' => 'image', 'label' => 'Gambar'],
                     'image_position' => ['type' => 'select', 'label' => 'Posisi gambar', 'options' => ['left' => 'Kiri', 'right' => 'Kanan'], 'default' => 'right'],
+                    'button_label' => ['type' => 'text', 'label' => 'Teks tombol', 'max' => 40],
+                    'button_url' => ['type' => 'url', 'label' => 'Link tombol', 'max' => 255],
                 ],
             ],
             'services' => [
@@ -70,6 +83,42 @@ class SectionTypes
                     'items' => ['type' => 'items', 'label' => 'Angka', 'max_items' => 6, 'fields' => [
                         'value' => ['type' => 'text', 'label' => 'Angka', 'max' => 20, 'required' => true],
                         'label' => ['type' => 'text', 'label' => 'Keterangan', 'max' => 60, 'required' => true],
+                    ]],
+                ],
+            ],
+            'steps' => [
+                'label' => 'Alur Kerja',
+                'description' => 'Langkah-langkah bekerja sama, ditampilkan bernomor.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Judul', 'max' => 150],
+                    'subtitle' => ['type' => 'textarea', 'label' => 'Subjudul', 'max' => 400],
+                    'items' => ['type' => 'items', 'label' => 'Langkah', 'max_items' => 6, 'fields' => [
+                        'title' => ['type' => 'text', 'label' => 'Nama langkah', 'max' => 80, 'required' => true],
+                        'text' => ['type' => 'textarea', 'label' => 'Keterangan', 'max' => 300],
+                    ]],
+                ],
+            ],
+            'team' => [
+                'label' => 'Tim',
+                'description' => 'Foto, nama, dan jabatan orang-orang penting di perusahaan.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Judul', 'max' => 150],
+                    'subtitle' => ['type' => 'textarea', 'label' => 'Subjudul', 'max' => 400],
+                    'items' => ['type' => 'items', 'label' => 'Anggota', 'max_items' => 12, 'fields' => [
+                        'photo' => ['type' => 'image', 'label' => 'Foto'],
+                        'name' => ['type' => 'text', 'label' => 'Nama', 'max' => 80, 'required' => true],
+                        'role' => ['type' => 'text', 'label' => 'Jabatan', 'max' => 80],
+                    ]],
+                ],
+            ],
+            'clients' => [
+                'label' => 'Klien / Mitra',
+                'description' => 'Deretan logo atau nama klien dan mitra perusahaan.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Judul', 'max' => 150],
+                    'items' => ['type' => 'items', 'label' => 'Klien', 'max_items' => 18, 'fields' => [
+                        'name' => ['type' => 'text', 'label' => 'Nama', 'max' => 60, 'required' => true],
+                        'logo' => ['type' => 'image', 'label' => 'Logo (opsional)'],
                     ]],
                 ],
             ],

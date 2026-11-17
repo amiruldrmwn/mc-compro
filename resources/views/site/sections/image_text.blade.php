@@ -3,6 +3,7 @@
         <div>
             @if ($d['title'])<h2 class="sec-title mb-6">{{ $d['title'] }}</h2>@endif
             <div class="prose-site">{!! \Illuminate\Support\Str::markdown($d['body'], ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}</div>
+            @if ($d['button_label'] && $d['button_url'])<a href="{{ $d['button_url'] }}" class="btn mt-8">{{ $d['button_label'] }}</a>@endif
         </div>
         <div @class(['md:order-first' => $d['image_position'] === 'left'])>
             @if ($site->image($d['image']))

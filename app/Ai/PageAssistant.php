@@ -170,7 +170,7 @@ class PageAssistant
         $paths = [];
 
         array_walk_recursive($data, function ($value) use (&$paths) {
-            if (is_string($value) && preg_match('#^(media|site)/[A-Za-z0-9._-]+$#', $value)) {
+            if (is_string($value) && preg_match('#^(media|site|demo)/[A-Za-z0-9._-]+$#', $value)) {
                 $paths[] = $value;
             }
         });

@@ -8,13 +8,19 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('compro:install-content')]
+#[Signature('compro:install-content {--replace : Delete the current pages and start again from the sample content}')]
 #[Description('Create the starting pages (Beranda, Tentang, Kontak) when the site has no pages yet')]
 class InstallContentCommand extends Command
 {
     public function handle(Site $site): int
     {
-        DefaultContent::install((string) $site->get('site_name'))
+        $replace = (bool) $this->option('replace');
+
+        if ($replace && ! $this->confirm('Delete every page and start again from the sample content?')) {
+            return self::FAILURE;
+        }
+
+        DefaultContent::install((string) $site->get('site_name'), $replace)
             ? $this->components->info('Starting pages created.')
             : $this->components->info('The site already has pages.');
 

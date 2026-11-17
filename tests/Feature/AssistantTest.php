@@ -41,7 +41,7 @@ class AssistantTest extends TestCase
 
     public function test_proposal_is_returned_cleaned_and_not_saved()
     {
-        $id = $this->page->sections[0]['id'];
+        $id = $this->page->sections[1]['id'];
         $this->aiReplies(['message' => 'Saya ubah judulnya.', 'sections' => [
             ['id' => $id, 'type' => 'image_text', 'data' => ['title' => 'Profil Resmi', 'body' => 'Teks baru', 'image' => 'http://evil.test/x.png']],
             ['id' => 'new1', 'type' => 'cta', 'data' => ['title' => 'Hubungi', 'button_url' => 'javascript:alert(1)']],
@@ -52,10 +52,10 @@ class AssistantTest extends TestCase
             ->assertJsonPath('message', 'Saya ubah judulnya.')
             ->assertJsonCount(2, 'sections')
             ->assertJsonPath('sections.0.data.title', 'Profil Resmi')
-            ->assertJsonPath('sections.0.data.image', '')
+            ->assertJsonPath('sections.0.data.image', 'demo/lobby.jpg')
             ->assertJsonPath('sections.1.data.button_url', '');
 
-        $this->assertSame('Tentang PT Uji', $this->page->fresh()->sections[0]['data']['title']);
+        $this->assertSame('Perjalanan Kami', $this->page->fresh()->sections[1]['data']['title']);
 
         Http::assertSent(fn (Request $r) => $r->url() === 'https://ai.test/v1/chat/completions'
             && $r->hasHeader('Authorization', 'Bearer sk-test')
@@ -66,11 +66,11 @@ class AssistantTest extends TestCase
     public function test_uploaded_images_are_kept()
     {
         $sections = $this->page->sections;
-        $sections[0]['data']['image'] = 'media/foto.jpg';
+        $sections[1]['data']['image'] = 'media/foto.jpg';
         $this->page->update(['sections' => $sections]);
 
         $this->aiReplies(['message' => 'ok', 'sections' => [
-            ['id' => $sections[0]['id'], 'type' => 'image_text', 'data' => ['title' => 'Baru', 'image' => '']],
+            ['id' => $sections[1]['id'], 'type' => 'image_text', 'data' => ['title' => 'Baru', 'image' => '']],
         ]]);
 
         $this->ask()->assertOk()->assertJsonPath('sections.0.data.image', 'media/foto.jpg');

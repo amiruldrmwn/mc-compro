@@ -8,15 +8,21 @@
         @endif
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($d['items'] as $item)
-                <div class="card">
-                    @if ($site->image($item['image']))
-                        <img src="{{ $site->image($item['image']) }}" alt="{{ $item['title'] }}" class="mb-5 aspect-video w-full object-cover" style="border-radius: calc(var(--radius) * .75)" loading="lazy">
-                    @else
-                        <div class="mb-5 flex size-12 items-center justify-center text-lg font-bold" style="border-radius: calc(var(--radius) * .75); background: var(--brand-soft); color: var(--brand)">{{ str_pad((string) ($loop->iteration), 2, '0', STR_PAD_LEFT) }}</div>
-                    @endif
-                    <h3 class="text-xl font-semibold">{{ $item['title'] }}</h3>
-                    @if ($item['text'])<p class="muted mt-2 leading-relaxed">{{ $item['text'] }}</p>@endif
-                </div>
+                @if ($site->image($item['image']))
+                    <div class="card card-media flex flex-col overflow-hidden p-0!">
+                        <img src="{{ $site->image($item['image']) }}" alt="{{ $item['title'] }}" class="aspect-[16/10] w-full object-cover transition duration-500 hover:scale-105" loading="lazy">
+                        <div class="flex-1 p-6">
+                            <h3 class="text-xl font-semibold">{{ $item['title'] }}</h3>
+                            @if ($item['text'])<p class="muted mt-2 leading-relaxed">{{ $item['text'] }}</p>@endif
+                        </div>
+                    </div>
+                @else
+                    <div class="card">
+                        <div class="mb-5 flex size-12 items-center justify-center text-lg font-bold" style="border-radius: calc(var(--radius) * .75); background: var(--brand-soft); color: var(--brand)">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
+                        <h3 class="text-xl font-semibold">{{ $item['title'] }}</h3>
+                        @if ($item['text'])<p class="muted mt-2 leading-relaxed">{{ $item['text'] }}</p>@endif
+                    </div>
+                @endif
             @endforeach
         </div>
     </div>

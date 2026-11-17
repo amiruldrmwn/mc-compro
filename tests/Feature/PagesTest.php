@@ -28,8 +28,10 @@ class PagesTest extends TestCase
         foreach (['korporat', 'modern', 'minimalis'] as $theme) {
             app(Site::class)->put(['theme' => $theme]);
 
-            $this->get('/')->assertOk()->assertSee('PT Uji Coba, mitra terpercaya', false)->assertSee("theme-{$theme}", false);
-            $this->get('/tentang')->assertOk()->assertSee('Tentang PT Uji Coba');
+            $this->get('/')->assertOk()->assertSee('Solusi profesional untuk pertumbuhan bisnis Anda')->assertSee("theme-{$theme}", false)->assertSee('/storage/demo/hero-tower.jpg', false);
+            $this->get('/tentang')->assertOk()->assertSee('Mengenal lebih dekat PT Uji Coba')->assertSee('Hendra Gunawan');
+            $this->get('/layanan')->assertOk()->assertSee('Alur Kerja Sama');
+            $this->get('/proyek')->assertOk()->assertSee('Galeri Proyek');
             $this->get('/kontak')->assertOk()->assertSee('Kirim Pesan');
         }
     }
@@ -90,21 +92,21 @@ class PagesTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $this->post(route('pages.store'), ['title' => 'Layanan Kami'])->assertRedirect();
-        $page = Page::where('slug', 'layanan-kami')->firstOrFail();
+        $this->post(route('pages.store'), ['title' => 'Produk Kami'])->assertRedirect();
+        $page = Page::where('slug', 'produk-kami')->firstOrFail();
 
         $this->put(route('pages.update', $page), [
-            'title' => 'Layanan',
-            'slug' => 'layanan',
+            'title' => 'Produk',
+            'slug' => 'produk',
             'in_menu' => true,
             'published' => true,
             'sections' => [['id' => 'a1', 'type' => 'cta', 'data' => ['title' => 'Hubungi kami', 'button_url' => '/kontak']]],
         ])->assertRedirect(route('pages.edit', $page));
 
         $page->refresh();
-        $this->assertSame('layanan', $page->slug);
+        $this->assertSame('produk', $page->slug);
         $this->assertSame('Hubungi kami', $page->sections[0]['data']['title']);
-        $this->get('/layanan')->assertOk()->assertSee('Hubungi kami');
+        $this->get('/produk')->assertOk()->assertSee('Hubungi kami');
 
         $ids = Page::orderByDesc('position')->pluck('id')->all();
         $this->post(route('pages.reorder'), ['ids' => $ids]);
@@ -136,7 +138,7 @@ class PagesTest extends TestCase
         $this->post(route('pages.home', $about));
         $this->assertTrue($about->fresh()->is_home);
         $this->assertFalse($home->fresh()->is_home);
-        $this->get('/')->assertSee('Tentang PT Uji Coba');
+        $this->get('/')->assertSee('Perjalanan Kami');
     }
 
     public function test_theme_can_be_changed()
@@ -157,6 +159,21 @@ class PagesTest extends TestCase
 
         Storage::disk('public')->assertExists($response->json('path'));
         $this->postJson(route('media.store'), ['file' => UploadedFile::fake()->create('a.pdf')])->assertUnprocessable();
+    }
+
+    public function test_sample_photos_are_copied_and_pages_can_start_over()
+    {
+        Storage::fake('public');
+        Page::query()->delete();
+
+        DefaultContent::install('PT Baru');
+        Storage::disk('public')->assertExists('demo/team-1.jpg');
+        $this->assertSame(5, Page::count());
+
+        Page::where('slug', 'proyek')->delete();
+        $this->assertFalse(DefaultContent::install('PT Baru'));
+        $this->assertTrue(DefaultContent::install('PT Baru', replace: true));
+        $this->assertSame(5, Page::count());
     }
 
     public function test_sitemap_lists_published_pages()
