@@ -3,6 +3,7 @@
 namespace App\Sections;
 
 use App\Models\Page;
+use App\Support\Site;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -11,8 +12,11 @@ use Illuminate\Support\Facades\Storage;
  */
 class DefaultContent
 {
-    /** Sample photos, copied to the public disk under demo/ when the pages are made. */
+    /** Sample photos and logos, copied to the public disk under demo/ when the pages are made. */
     private const PHOTOS_DIR = 'resources/demo';
+
+    /** The sample logo a site shows until the owner uploads theirs. */
+    public const LOGO = 'demo/logo.svg';
 
     public static function install(string $company, bool $replace = false): bool
     {
@@ -25,6 +29,12 @@ class DefaultContent
         }
 
         self::copyPhotos();
+
+        $site = app(Site::class);
+
+        if (blank($site->get('logo'))) {
+            $site->put(['logo' => self::LOGO]);
+        }
 
         foreach (self::pages($company) as $position => $page) {
             Page::query()->create([
@@ -41,7 +51,9 @@ class DefaultContent
     {
         $disk = Storage::disk('public');
 
-        foreach (glob(base_path(self::PHOTOS_DIR).'/*.jpg') ?: [] as $file) {
+        $dir = base_path(self::PHOTOS_DIR);
+
+        foreach ([...(glob("{$dir}/*.jpg") ?: []), ...(glob("{$dir}/*.svg") ?: [])] as $file) {
             $path = 'demo/'.basename($file);
 
             if (! $disk->exists($path)) {
@@ -100,8 +112,12 @@ class DefaultContent
                     ['type' => 'clients', 'data' => [
                         'title' => 'Dipercaya oleh perusahaan terkemuka',
                         'items' => [
-                            ['name' => 'Sinar Abadi'], ['name' => 'Mitra Sejahtera'], ['name' => 'Wijaya Group'],
-                            ['name' => 'Nusantara Jaya'], ['name' => 'Bumi Karya'], ['name' => 'Cahaya Logistik'],
+                            ['name' => 'Sinar Abadi', 'logo' => 'demo/client-sinar-abadi.svg'],
+                            ['name' => 'Mitra Sejahtera', 'logo' => 'demo/client-mitra-sejahtera.svg'],
+                            ['name' => 'Wijaya Group', 'logo' => 'demo/client-wijaya-group.svg'],
+                            ['name' => 'Nusantara Jaya', 'logo' => 'demo/client-nusantara-jaya.svg'],
+                            ['name' => 'Bumi Karya', 'logo' => 'demo/client-bumi-karya.svg'],
+                            ['name' => 'Cahaya Logistik', 'logo' => 'demo/client-cahaya-logistik.svg'],
                         ],
                     ]],
                     ['type' => 'image_text', 'data' => [

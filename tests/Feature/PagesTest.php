@@ -176,6 +176,23 @@ class PagesTest extends TestCase
         $this->assertSame(5, Page::count());
     }
 
+    public function test_new_sites_get_a_sample_logo_until_the_owner_uploads_one()
+    {
+        $site = app(Site::class);
+        $this->assertSame(DefaultContent::LOGO, $site->get('logo'));
+        $this->get('/')->assertSee('fill: var(--brand)', false)->assertSee('/storage/demo/client-wijaya-group.svg', false);
+
+        // The dashboard still asks for a real logo.
+        $this->actingAs(User::factory()->create())->get(route('dashboard'))
+            ->assertInertia(fn ($p) => $p->where('checklist.0.done', false));
+
+        // An uploaded logo is shown as it is, and a later install keeps it.
+        $site->put(['logo' => 'site/punya-saya.png']);
+        $this->get('/')->assertSee('/storage/site/punya-saya.png', false);
+        DefaultContent::install('PT Uji Coba', replace: true);
+        $this->assertSame('site/punya-saya.png', app(Site::class)->get('logo'));
+    }
+
     public function test_sitemap_lists_published_pages()
     {
         $this->get('/sitemap.xml')->assertOk()->assertSee(url('/kontak'));
