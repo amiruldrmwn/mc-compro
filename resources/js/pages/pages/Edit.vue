@@ -6,12 +6,16 @@ import {
     ChevronDown,
     Copy,
     ExternalLink,
+    Eye,
     Plus,
+    Sparkles,
     Trash2,
 } from '@lucide/vue';
 import { computed, ref } from 'vue';
 import InputError from '@/components/InputError.vue';
+import AssistantPanel from '@/components/sections/AssistantPanel.vue';
 import FieldInput from '@/components/sections/FieldInput.vue';
+import PreviewDialog from '@/components/sections/PreviewDialog.vue';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -53,6 +57,7 @@ const props = defineProps<{
     page: PageForm & { id: number; url: string; is_home: boolean };
     sectionTypes: Record<string, SectionTypeDef>;
     storageUrl: string;
+    aiEnabled: boolean;
 }>();
 
 defineOptions({
@@ -74,6 +79,18 @@ const form = useForm<PageForm>({
 const open = ref<Set<string>>(new Set());
 const picker = ref(false);
 const showSettings = ref(false);
+const assistantOpen = ref(false);
+const previewOpen = ref(false);
+
+function applyFromAi(sections: Section[]): void {
+    const before = new Set(form.sections.map((s) => s.id));
+    form.sections = sections;
+    // Open the sections the AI added so the owner sees them.
+    open.value = new Set([
+        ...open.value,
+        ...sections.filter((s) => !before.has(s.id)).map((s) => s.id),
+    ]);
+}
 
 const sectionErrors = computed(() => {
     const errors: Record<number, string> = {};
@@ -183,12 +200,27 @@ function submit(): void {
                     · {{ form.sections.length }} section
                 </p>
             </div>
-            <Button as-child variant="outline" size="sm">
-                <a :href="page.url" target="_blank" rel="noopener">
-                    <ExternalLink class="size-4" />
-                    Lihat halaman
-                </a>
-            </Button>
+            <div class="flex flex-wrap gap-2">
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    @click="previewOpen = true"
+                >
+                    <Eye class="size-4" />
+                    Pratinjau
+                </Button>
+                <Button as-child variant="outline" size="sm">
+                    <a :href="page.url" target="_blank" rel="noopener">
+                        <ExternalLink class="size-4" />
+                        Lihat halaman
+                    </a>
+                </Button>
+                <Button type="button" size="sm" @click="assistantOpen = true">
+                    <Sparkles class="size-4" />
+                    Asisten AI
+                </Button>
+            </div>
         </div>
 
         <Card>
@@ -421,6 +453,22 @@ function submit(): void {
             </div>
         </div>
     </form>
+
+    <AssistantPanel
+        v-model:open="assistantOpen"
+        :page-id="page.id"
+        :page-title="form.title"
+        :sections="form.sections"
+        :enabled="aiEnabled"
+        @apply="applyFromAi"
+    />
+
+    <PreviewDialog
+        v-model:open="previewOpen"
+        :page-id="page.id"
+        :sections="form.sections"
+        title="Pratinjau (belum disimpan)"
+    />
 
     <Dialog v-model:open="picker">
         <DialogContent class="max-h-[85vh] overflow-y-auto sm:max-w-2xl">

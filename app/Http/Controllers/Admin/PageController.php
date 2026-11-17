@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Ai\AiClient;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Sections\SectionTypes;
@@ -67,6 +68,7 @@ class PageController extends Controller
             ],
             'sectionTypes' => SectionTypes::all(),
             'storageUrl' => rtrim(asset('storage'), '/'),
+            'aiEnabled' => app(AiClient::class)->enabled(),
         ]);
     }
 

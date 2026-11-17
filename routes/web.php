@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AssistantController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MessageController;
@@ -23,6 +24,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::put('pages/{page}', [PageController::class, 'update'])->name('pages.update');
     Route::delete('pages/{page}', [PageController::class, 'destroy'])->name('pages.destroy');
     Route::post('pages/{page}/home', [PageController::class, 'makeHome'])->name('pages.home');
+    Route::post('pages/{page}/assistant', [AssistantController::class, 'page'])->middleware('throttle:20,1')->name('pages.assistant');
+    Route::post('pages/{page}/preview', [AssistantController::class, 'preview'])->name('pages.preview');
 
     Route::post('media', [MediaController::class, 'store'])->name('media.store');
 
