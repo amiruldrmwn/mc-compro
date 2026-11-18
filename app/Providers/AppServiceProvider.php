@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('site.*', function ($view) {
             $view->with([
                 'site' => app(Site::class),
-                'menu' => Page::query()->menu()->get(),
+                'menu' => $view->getData()['menu'] ?? Page::query()->menu()->get(),
                 'page' => $view->getData()['page'] ?? null,
                 'theme' => $view->getData()['theme'] ?? Themes::current(app(Site::class)),
             ]);

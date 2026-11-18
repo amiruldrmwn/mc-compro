@@ -98,9 +98,9 @@ class Site
     /**
      * Black or white, whichever reads better on the brand colour.
      */
-    public function onBrand(): string
+    public function onBrand(?string $color = null): string
     {
-        $hex = ltrim((string) $this->get('primary_color'), '#');
+        $hex = ltrim($color ?? (string) $this->get('primary_color'), '#');
 
         if (! preg_match('/^[0-9a-f]{6}$/i', $hex)) {
             return '#ffffff';

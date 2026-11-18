@@ -11,7 +11,10 @@ class Themes
     public const DEFAULT = 'korporat';
 
     /**
-     * @return array<string, array{label: string, description: string, fonts: string}>
+     * preset: which sample content (DefaultContent) suits the template; color: its suggested
+     * brand colour, applied together with that sample content.
+     *
+     * @return array<string, array{label: string, description: string, fonts: string, preset: string, color: string}>
      */
     public static function all(): array
     {
@@ -20,16 +23,36 @@ class Themes
                 'label' => 'Korporat',
                 'description' => 'Rapi dan meyakinkan: header dengan info kontak, hero berwarna penuh, kartu bergaris. Cocok untuk kontraktor, konsultan, dan industri.',
                 'fonts' => 'inter:400,500,600,700',
+                'preset' => 'korporat',
+                'color' => '#2563eb',
             ],
             'modern' => [
                 'label' => 'Modern',
                 'description' => 'Segar dan berani: gradasi warna, sudut membulat, huruf tebal. Cocok untuk startup, agensi, dan teknologi.',
                 'fonts' => 'plus-jakarta-sans:400,500,600,700,800',
+                'preset' => 'korporat',
+                'color' => '#7c3aed',
             ],
             'minimalis' => [
                 'label' => 'Minimalis',
                 'description' => 'Elegan dan lapang: huruf serif untuk judul, banyak ruang kosong, garis tipis. Cocok untuk arsitek, butik, dan firma hukum.',
                 'fonts' => 'fraunces:400,600|inter:400,500',
+                'preset' => 'korporat',
+                'color' => '#1c1917',
+            ],
+            'spa' => [
+                'label' => 'Spa',
+                'description' => 'Mewah dan menenangkan: latar gelap, aksen emas, huruf serif klasik, daftar harga perawatan. Cocok untuk spa, salon, pijat, dan klinik kecantikan.',
+                'fonts' => 'cormorant-garamond:400,500,600,400i|jost:300,400,500',
+                'preset' => 'spa',
+                'color' => '#c9a45c',
+            ],
+            'kue' => [
+                'label' => 'Kue & Bakery',
+                'description' => 'Hangat dan menggugah selera: warna krem dan cokelat, sudut membulat, kartu produk dengan harga dan tombol pesan. Cocok untuk toko kue, bakery, kafe, dan kuliner.',
+                'fonts' => 'playfair-display:500,600,700,500i,600i|nunito:400,600,700,800',
+                'preset' => 'kue',
+                'color' => '#5b3423',
             ],
         ];
     }

@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="{{ \App\Support\Themes::fontsUrl($theme) }}">
     @vite('resources/css/site.css')
     <style>
-        body.site { --brand: {{ $site->get('primary_color') }}; --on-brand: {{ $site->onBrand() }}; }
+        body.site { --brand: {{ $brand ?? $site->get('primary_color') }}; --on-brand: {{ $site->onBrand($brand ?? null) }}; }
     </style>
 </head>
 <body class="site theme-{{ $theme }}">

@@ -25,7 +25,7 @@ class PagesTest extends TestCase
 
     public function test_default_pages_render_in_every_theme()
     {
-        foreach (['korporat', 'modern', 'minimalis'] as $theme) {
+        foreach (['korporat', 'modern', 'minimalis', 'spa', 'kue'] as $theme) {
             app(Site::class)->put(['theme' => $theme]);
 
             $this->get('/')->assertOk()->assertSee('Solusi profesional untuk pertumbuhan bisnis Anda')->assertSee("theme-{$theme}", false)->assertSee('/storage/demo/hero-tower.jpg', false);
@@ -147,6 +147,53 @@ class PagesTest extends TestCase
         $this->get('/')->assertSee('theme-modern', false);
 
         $this->put(route('themes.update'), ['theme' => 'tidak-ada'])->assertSessionHasErrors('theme');
+    }
+
+    public function test_spa_and_cake_sample_content_render_in_every_theme()
+    {
+        Storage::fake('public');
+
+        foreach (['spa' => ['Daftar Perawatan', 'Rp250.000', '/perawatan'], 'kue' => ['Produk Favorit', 'Rp235.000', '/menu']] as $preset => [$heading, $price, $slug]) {
+            DefaultContent::install('Toko Uji', replace: true, preset: $preset);
+            Storage::disk('public')->assertExists($preset === 'spa' ? 'demo/spa-hero.jpg' : 'demo/cake-hero.jpg');
+
+            foreach (['korporat', 'spa', 'kue'] as $theme) {
+                app(Site::class)->put(['theme' => $theme]);
+                $this->get('/')->assertOk()->assertSee($heading)->assertSee($price);
+                $this->get($slug)->assertOk();
+            }
+        }
+    }
+
+    public function test_price_list_order_buttons_open_whatsapp()
+    {
+        DefaultContent::install('Toko Uji', replace: true, preset: 'kue');
+        app(Site::class)->put(['whatsapp' => '0812 3456 789', 'theme' => 'kue']);
+
+        $this->get('/')->assertSee('https://wa.me/628123456789?text='.rawurlencode('Halo, saya ingin memesan Black Forest'), false);
+    }
+
+    public function test_switching_theme_can_install_its_sample_content()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->put(route('themes.update'), ['theme' => 'spa'])->assertSessionHasNoErrors();
+        $this->assertTrue(Page::where('slug', 'proyek')->exists());
+
+        $this->put(route('themes.update'), ['theme' => 'spa', 'with_content' => true]);
+        $this->assertFalse(Page::where('slug', 'proyek')->exists());
+        $this->assertTrue(Page::where('slug', 'perawatan')->exists());
+        $this->assertSame('#c9a45c', app(Site::class)->get('primary_color'));
+        $this->get('/')->assertSee('theme-spa', false)->assertSee('Ruang tenang untuk tubuh dan pikiran');
+    }
+
+    public function test_template_sample_preview_is_for_admins_and_saves_nothing()
+    {
+        $this->get('/?preview_sample=kue')->assertSee('Solusi profesional untuk pertumbuhan bisnis Anda');
+
+        $this->actingAs(User::factory()->create())->get('/?preview_sample=kue')
+            ->assertOk()->assertSee('theme-kue', false)->assertSee('Kue cokelat premium untuk setiap momen manis')->assertSee('--brand: #5b3423', false);
+        $this->assertFalse(Page::where('slug', 'menu')->exists());
     }
 
     public function test_images_can_be_uploaded()

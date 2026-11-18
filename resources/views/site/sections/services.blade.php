@@ -6,7 +6,7 @@
                 @if ($d['subtitle'])<p class="sec-sub">{{ $d['subtitle'] }}</p>@endif
             </div>
         @endif
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div @class(['grid gap-6 sm:grid-cols-2', count($d['items']) === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'])>
             @foreach ($d['items'] as $item)
                 @if ($site->image($item['image']))
                     <div class="card card-media flex flex-col overflow-hidden p-0!">

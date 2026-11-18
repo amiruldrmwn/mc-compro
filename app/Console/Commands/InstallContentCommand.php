@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Sections\DefaultContent;
 use App\Support\Site;
+use App\Support\Themes;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -20,7 +21,7 @@ class InstallContentCommand extends Command
             return self::FAILURE;
         }
 
-        DefaultContent::install((string) $site->get('site_name'), $replace)
+        DefaultContent::install((string) $site->get('site_name'), $replace, Themes::all()[Themes::current($site)]['preset'])
             ? $this->components->info('Starting pages created.')
             : $this->components->info('The site already has pages.');
 

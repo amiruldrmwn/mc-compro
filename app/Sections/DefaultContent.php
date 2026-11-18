@@ -7,8 +7,9 @@ use App\Support\Site;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * The pages a new site starts with (Beranda, Tentang Kami, Layanan, Proyek, Kontak), filled with
- * sample copy and photos (resources/demo) the owner replaces by hand or with the AI assistant.
+ * The pages a site starts with, filled with sample copy and photos (resources/demo) the owner
+ * replaces by hand or with the AI assistant. Each preset suits a group of templates (see
+ * Themes::all()): korporat (Beranda, Tentang Kami, Layanan, Proyek, Kontak), spa and kue.
  */
 class DefaultContent
 {
@@ -18,7 +19,9 @@ class DefaultContent
     /** The sample logo a site shows until the owner uploads theirs. */
     public const LOGO = 'demo/logo.svg';
 
-    public static function install(string $company, bool $replace = false): bool
+    public const PRESETS = ['korporat', 'spa', 'kue'];
+
+    public static function install(string $company, bool $replace = false, string $preset = 'korporat'): bool
     {
         if (Page::query()->exists()) {
             if (! $replace) {
@@ -36,7 +39,7 @@ class DefaultContent
             $site->put(['logo' => self::LOGO]);
         }
 
-        foreach (self::pages($company) as $position => $page) {
+        foreach (self::pagesFor($preset, $company) as $position => $page) {
             Page::query()->create([
                 ...$page,
                 'position' => $position,
@@ -60,6 +63,28 @@ class DefaultContent
                 $disk->put($path, (string) file_get_contents($file));
             }
         }
+    }
+
+    /**
+     * The sample pages of a preset, not saved: used by install() and the template previews.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function pagesFor(string $preset, string $company): array
+    {
+        return match ($preset) {
+            'spa' => SpaContent::pages($company),
+            'kue' => CakeContent::pages($company),
+            default => self::pages($company),
+        };
+    }
+
+    /**
+     * Makes sure the sample photos exist on the public disk (for previews before install).
+     */
+    public static function ensurePhotos(): void
+    {
+        self::copyPhotos();
     }
 
     /**

@@ -75,6 +75,23 @@ class SectionTypes
                     ]],
                 ],
             ],
+            'pricelist' => [
+                'label' => 'Daftar Harga / Menu',
+                'description' => 'Produk, menu, atau perawatan beserta harganya. Dengan foto tampil sebagai kartu produk, tanpa foto sebagai daftar harga.',
+                'fields' => [
+                    'title' => ['type' => 'text', 'label' => 'Judul', 'max' => 150],
+                    'subtitle' => ['type' => 'textarea', 'label' => 'Subjudul', 'max' => 400],
+                    'items' => ['type' => 'items', 'label' => 'Produk / layanan', 'max_items' => 24, 'fields' => [
+                        'name' => ['type' => 'text', 'label' => 'Nama', 'max' => 100, 'required' => true],
+                        'description' => ['type' => 'textarea', 'label' => 'Keterangan', 'max' => 300],
+                        'info' => ['type' => 'text', 'label' => 'Info singkat (mis. 60 menit, ukuran 20 cm)', 'max' => 40],
+                        'price' => ['type' => 'text', 'label' => 'Harga (mis. Rp250.000)', 'max' => 40],
+                        'image' => ['type' => 'image', 'label' => 'Foto (opsional)'],
+                    ]],
+                    'note' => ['type' => 'text', 'label' => 'Catatan kecil di bawah', 'max' => 200],
+                    'order_button' => ['type' => 'select', 'label' => 'Tombol pesan via WhatsApp', 'options' => ['yes' => 'Tampilkan', 'no' => 'Sembunyikan'], 'default' => 'yes'],
+                ],
+            ],
             'stats' => [
                 'label' => 'Angka Pencapaian',
                 'description' => 'Angka penting, misalnya jumlah klien atau tahun berdiri.',

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Page;
+use App\Sections\DefaultContent;
+use App\Sections\SectionTypes;
 use App\Support\Site;
 use App\Support\Themes;
 use Illuminate\Http\RedirectResponse;
@@ -18,6 +20,10 @@ class SiteController extends Controller
 {
     public function show(Site $site, ?string $slug = null): View
     {
+        if ($slug === null && request()->user() && Themes::has(request('preview_sample'))) {
+            return $this->sample($site, (string) request('preview_sample'));
+        }
+
         $page = $slug === null
             ? Page::query()->where('is_home', true)->first() ?? Page::query()->orderBy('position')->first()
             : Page::query()->where('slug', $slug)->first();
@@ -35,6 +41,28 @@ class SiteController extends Controller
             'page' => $page,
             'theme' => request()->user() && Themes::has(request('preview_theme')) ? request('preview_theme') : Themes::current($site),
         ]);
+    }
+
+    /**
+     * The home page of a template's sample content, without saving anything: the admin's
+     * template previews show what a template looks like with content made for it.
+     */
+    private function sample(Site $site, string $theme): View
+    {
+        DefaultContent::ensurePhotos();
+
+        $pages = collect(DefaultContent::pagesFor(Themes::all()[$theme]['preset'], (string) $site->get('site_name')))
+            ->map(fn (array $p, int $i) => (new Page)->forceFill([
+                'id' => $i + 1,
+                'title' => $p['title'],
+                'slug' => $p['slug'],
+                'is_home' => $p['is_home'] ?? false,
+                'in_menu' => true,
+                'published' => true,
+                'sections' => array_map(fn (array $s) => SectionTypes::clean($s), $p['sections']),
+            ]));
+
+        return view('site.page', ['page' => $pages->first(), 'menu' => $pages, 'theme' => $theme, 'brand' => Themes::all()[$theme]['color']]);
     }
 
     public function contact(Request $request): RedirectResponse

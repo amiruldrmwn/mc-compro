@@ -176,6 +176,24 @@
         box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 20%, transparent);
     }
 
+    .price {
+        color: var(--brand);
+    }
+
+    .price-info {
+        color: var(--muted);
+    }
+
+    .price-row + .price-row {
+        border-top: 1px solid var(--line);
+    }
+
+    .price-dots {
+        min-width: 1rem;
+        border-bottom: 1px dotted var(--line);
+        transform: translateY(-0.3em);
+    }
+
     .nav-link {
         @apply text-sm font-medium transition;
         color: var(--muted);
@@ -355,4 +373,250 @@
 
 .theme-minimalis .team-card:hover .team-photo {
     filter: none;
+}
+
+/* ---------- Spa: dark, calm, gold accents, classic serif ---------- */
+.theme-spa {
+    --font-body: 'Jost', ui-sans-serif, system-ui, sans-serif;
+    --font-head: 'Cormorant Garamond', ui-serif, Georgia, serif;
+    --radius: 0;
+    --surface: #16110d;
+    --surface-alt: #1e1813;
+    --ink: #f4ede1;
+    --muted: #b9ab96;
+    --line: color-mix(in oklab, var(--brand) 28%, transparent);
+    --brand-soft: color-mix(in oklab, var(--brand) 14%, #16110d);
+    --brand-dark: color-mix(in oklab, var(--brand) 80%, black);
+
+    font-weight: 300;
+}
+
+.theme-spa h1,
+.theme-spa h2,
+.theme-spa h3 {
+    letter-spacing: 0.01em;
+}
+
+.theme-spa .sec-title {
+    @apply text-4xl font-normal sm:text-5xl;
+}
+
+.theme-spa .sec-title::after {
+    content: '';
+    display: block;
+    width: 4rem;
+    height: 1px;
+    margin: 1.25rem 0 0;
+    background: var(--brand);
+}
+
+.theme-spa .sec-head .sec-title::after,
+.theme-spa .text-center .sec-title::after {
+    margin: 1.25rem auto 0;
+}
+
+.theme-spa .sec-head {
+    @apply mb-12 sm:mb-16;
+}
+
+.theme-spa h3 {
+    @apply text-2xl font-medium;
+}
+
+.theme-spa .price-list h3 {
+    @apply text-xl;
+}
+
+.theme-spa .eyebrow,
+.theme-spa .spa-label {
+    @apply text-xs font-normal tracking-[0.3em] uppercase;
+    color: var(--brand);
+}
+
+.theme-spa .nav-link {
+    color: var(--muted);
+}
+
+.theme-spa .nav-link:hover,
+.theme-spa .nav-link[aria-current='page'] {
+    color: var(--brand);
+}
+
+.theme-spa .card {
+    background: var(--surface-alt);
+    border-color: var(--line);
+}
+
+.theme-spa .btn {
+    @apply font-normal tracking-wide;
+    background: var(--brand);
+    color: #16110d;
+}
+
+.theme-spa .btn:hover {
+    background: color-mix(in oklab, var(--brand) 85%, white);
+}
+
+.theme-spa .btn-outline {
+    background: transparent;
+    color: var(--brand);
+    box-shadow: inset 0 0 0 1px var(--brand);
+}
+
+.theme-spa .btn-outline:hover {
+    background: var(--brand);
+    color: #16110d;
+}
+
+.theme-spa .btn-ghost-light {
+    background: rgb(255 255 255 / 0.06);
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5);
+}
+
+.theme-spa .btn-ghost-light:hover {
+    background: rgb(255 255 255 / 0.14);
+}
+
+.theme-spa .btn-light {
+    background: var(--brand);
+    color: #16110d;
+}
+
+.theme-spa .price {
+    @apply font-normal;
+    font-family: var(--font-head);
+    font-size: 1.35rem;
+}
+
+.theme-spa .price-row + .price-row {
+    border-top-style: dashed;
+}
+
+.theme-spa .price-dots {
+    border-bottom-color: color-mix(in oklab, var(--brand) 40%, transparent);
+}
+
+.theme-spa .field {
+    background: transparent;
+    color: var(--ink);
+}
+
+.theme-spa .step-num {
+    background: transparent;
+    color: var(--brand);
+    box-shadow: inset 0 0 0 1px var(--brand);
+    border-radius: 999px;
+    font-family: var(--font-head);
+}
+
+.theme-spa .team-photo {
+    border-radius: 999px 999px 0 0;
+}
+
+.theme-spa .prose-site strong,
+.theme-spa .prose-site h2,
+.theme-spa .prose-site h3 {
+    color: var(--ink);
+}
+
+.theme-spa .sec .btn-light {
+    background: #16110d;
+    color: var(--brand);
+}
+
+.theme-spa .sec .btn-light:hover {
+    background: #000;
+}
+
+/* ---------- Kue & Bakery: warm cream and chocolate, soft and round ---------- */
+.theme-kue {
+    --font-body: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    --font-head: 'Playfair Display', ui-serif, Georgia, serif;
+    --radius: 1.25rem;
+    --surface: #fffaf3;
+    --surface-alt: #f8eee1;
+    --ink: #3a2318;
+    --muted: #7b5f4f;
+    --line: #ecdcc8;
+    --brand-soft: color-mix(in oklab, var(--brand) 12%, #fffaf3);
+}
+
+.theme-kue .sec-title {
+    @apply font-semibold italic;
+}
+
+.theme-kue h3 {
+    font-family: var(--font-body);
+    letter-spacing: 0;
+}
+
+.theme-kue .eyebrow {
+    @apply rounded-full px-4 py-1 text-xs font-bold;
+    background: var(--brand-soft);
+}
+
+.theme-kue .nav-link {
+    color: var(--ink);
+}
+
+.theme-kue .btn {
+    @apply font-bold;
+    border-radius: 999px;
+}
+
+.theme-kue .btn-light {
+    background: #fff;
+    color: var(--brand);
+}
+
+.theme-kue .btn-outline {
+    color: var(--brand);
+    box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.theme-kue .card {
+    background: #fff;
+    border-color: var(--line);
+    box-shadow: 0 10px 30px -18px rgb(58 35 24 / 0.35);
+}
+
+.theme-kue .product-card {
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+.theme-kue .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgb(58 35 24 / 0.45);
+}
+
+.theme-kue .price-info {
+    @apply rounded-full px-2.5 py-1 font-bold;
+    background: var(--brand-soft);
+    color: var(--brand);
+}
+
+.theme-kue .price-list .price-info {
+    @apply text-xs;
+}
+
+.theme-kue .field {
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.theme-kue .step-num {
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+}
+
+.theme-kue .team-photo {
+    border-radius: 999px;
+}
+
+.theme-kue .sec-alt {
+    background: var(--surface-alt);
 }
